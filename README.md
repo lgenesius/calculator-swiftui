@@ -1,2 +1,2 @@
 # Calculator iOS App
-This is a calculator app created using Swift with SwiftUI framework.
+This is a simple calculator app created using Swift with SwiftUI framework.
