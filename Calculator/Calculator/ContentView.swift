@@ -21,10 +21,10 @@ enum CalcButton: String {
     case add = "+"
     case subtract = "-"
     case divide = "/"
-    case multiply = "*"
+    case multiply = "X"
     case equal = "="
     case clear = "AC"
-    case decimal = "."
+    case decimal = ","
     case percent = "%"
     case negative = "-/+"
     
@@ -40,9 +40,15 @@ enum CalcButton: String {
     }
 }
 
+enum Operation {
+    case add, subtract, multiply, divide, none
+}
+
 struct ContentView: View {
     
     @State var value = "0"
+    @State var runningNumber = 0
+    @State var currentOperation: Operation = .none
     
     let buttons: [[CalcButton]] = [
         [.clear, .negative, .percent, .divide],
@@ -94,13 +100,60 @@ struct ContentView: View {
             }
         }
     }
-    
+        
     func didTap(button: CalcButton) {
+        
         switch button {
         case .add, .subtract, .multiply, .divide, .equal:
-            break
+            if button == .add {
+                
+                if self.currentOperation != .none {
+                    updateValue()
+                }
+                
+                self.runningNumber = Int(self.value) ?? 0
+                self.currentOperation = .add
+            }
+            else if button == .subtract {
+                
+                if self.currentOperation != .none {
+                    updateValue()
+                }
+                
+                self.runningNumber = Int(self.value) ?? 0
+                self.currentOperation = .subtract
+            }
+            else if button == .multiply {
+                
+                if self.currentOperation != .none {
+                    updateValue()
+                }
+                
+                self.runningNumber = Int(self.value) ?? 0
+                self.currentOperation = .multiply
+            }
+            else if button == .divide {
+                
+                if self.currentOperation != .none {
+                    updateValue()
+                }
+                
+                self.runningNumber = Int(self.value) ?? 0
+                self.currentOperation = .divide
+            }
+            else if button == .equal {
+                updateValue()
+                self.currentOperation = .none
+            }
+            
+            
+            if button != .equal {
+                self.value = "0"
+            }
         case .clear:
             self.value = "0"
+            self.runningNumber = 0
+            self.currentOperation = .none
         case .decimal, .negative, .percent:
             break
         default:
@@ -111,6 +164,24 @@ struct ContentView: View {
             else {
                 self.value = "\(self.value)\(number)"
             }
+        }
+    }
+    
+    func updateValue() {
+        let runningValue = self.runningNumber
+        let currentValue = Int(self.value) ?? 0
+        
+        switch self.currentOperation {
+        case .add:
+            self.value = "\(runningValue + currentValue)"
+        case .subtract:
+            self.value = "\(runningValue - currentValue)"
+        case .multiply:
+            self.value = "\(runningValue * currentValue)"
+        case .divide:
+            self.value = "\(runningValue / currentValue)"
+        case .none:
+            break
         }
     }
     
