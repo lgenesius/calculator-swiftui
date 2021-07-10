@@ -41,15 +41,18 @@ enum CalcButton: String {
 }
 
 struct ContentView: View {
+    
+    @State var value = "0"
+    
+    let buttons: [[CalcButton]] = [
+        [.clear, .negative, .percent, .divide],
+        [.seven, .eight, .nine, .multiply],
+        [.four, .five, .six, .subtract],
+        [.one, .two, .three, .add],
+        [.zero, .decimal, .equal],
+    ]
+    
     var body: some View {
-        
-        let buttons: [[CalcButton]] = [
-            [.clear, .negative, .percent, .divide],
-            [.seven, .eight, .nine, .multiply],
-            [.four, .five, .six, .subtract],
-            [.one, .two, .three, .add],
-            [.zero, .decimal, .equal],
-        ]
         
         ZStack {
             Color.black
@@ -60,9 +63,9 @@ struct ContentView: View {
                 // Text Display
                 HStack {
                     Spacer()
-                    Text("0")
+                    Text(value)
                         .bold()
-                        .font(.system(size: 52))
+                        .font(.system(size: 90))
                         .foregroundColor(.white)
                 }
                 .padding()
@@ -92,7 +95,14 @@ struct ContentView: View {
         }
     }
     
+    func didTap(button: CalcButton) {
+        
+    }
+    
     func buttonWidth(item: CalcButton) -> CGFloat {
+        if item == .zero {
+            return ((UIScreen.main.bounds.width - (4*12)) / 4) * 2
+        }
         return (UIScreen.main.bounds.width - (5*12)) / 4
     }
     
